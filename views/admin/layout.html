@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="http://127.0.0.1:3000/public/stylesheets/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="http://127.0.0.1:3000/public/stylesheets/adminlte.min.css"/>
+		<link rel="stylesheet" type="text/css" href="http://127.0.0.1:3000/public/stylesheets/all.min.css"/>
+		<link rel="stylesheet" type="text/css" href="http://127.0.0.1:3000/public/stylesheets/fontawesome-free/css/all.css"/>
+		<link rel="stylesheet" href="http://127.0.0.1:3000/public/stylesheets/sweetalert2.min.css">
+		<link rel="stylesheet" href="http://127.0.0.1:3000/public/stylesheets/toastr.min.css">
+		<script src="http://127.0.0.1:3000/public/javascripts/jquery-1.11.3.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://127.0.0.1:3000/public/javascripts/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://127.0.0.1:3000/public/javascripts/adminlte.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://127.0.0.1:3000/public/javascripts/sweetalert2.min.js"></script>
+	</head>
+	<body class="sidebar-mini layout-fixed sidebar-open sidebar-collapse">
+		<div class="wrapper">
+			<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+			    <!-- Left navbar links -->
+			    <ul class="navbar-nav">
+			      <li class="nav-item">
+			        <a class="nav-link" data-widget="pushmenu" href="#">
+						<i class="fas fa-bars"></i>
+					</a>
+			      </li>
+			      <li class="nav-item d-none d-sm-inline-block">
+			        <a href="/admin" class="nav-link" style="font-size: 16px;">主页</a>
+			      </li>
+			      <li class="nav-item d-none d-sm-inline-block">
+			        <a href="#" class="nav-link" style="font-size: 16px;">联系我们</a>
+			      </li>
+			    </ul>
+			
+			    </nav>
+			<aside class="main-sidebar sidebar-dark-primary elevation-4">
+			    <!-- Brand Logo -->
+			    <a href="#" class="brand-link elevation-4">
+			     
+			      <span class="brand-text font-weight-light">AdminLTE 3</span>
+			    </a>
+			
+			    <!-- Sidebar -->
+			    <div class="sidebar">			    		  
+			      <!-- Sidebar Menu -->
+			      <nav class="mt-2">
+			        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+			          <!-- Add icons to the links using the .nav-icon class
+			               with font-awesome or any other icon font library -->
+			             <li class="nav-item">
+			            <a href="/form" class="nav-link">
+			              <i class="nav-icon fas fa-th"></i>
+			              <p>
+			                发表文章
+			                <span class="right badge badge-danger">New</span>
+			              </p>
+			            </a>
+			          </li>
+			         	 <li class="nav-item">
+			         	   <a href="/table" class="nav-link">
+			         	     <i class="nav-icon fas fa-th"></i>
+			         	     <p>
+			         	       文章列表
+			         	       <span class="right badge badge-danger">New</span>
+			         	     </p>
+			         	   </a>
+			         	 </li>
+			         	 			         	
+						 </ul>
+			      </nav>
+			      <!-- /.sidebar-menu -->
+			    </div>
+			    <!-- /.sidebar -->
+			  </aside>
+			  <div class="content-wrapper" style="min-height: 1333.2px;">
+		{% block content %}{% endblock %}
+		   </div>
+		</div>
+		
+	</body>
+
+	
+</html>

@@ -1,0 +1,202 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="card">
+              <div class="card-header">
+                <h3 class="card-title">文章列表</h3><br>
+                <div class="box-tools">
+                    <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
+                      <input type="text" name="table_search" class="form-control pull-right SearchIpt" placeholder="Search">
+                      <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default SearchBtn"><i class="fa fa-search"></i></button>
+                      </div>
+                    </div>
+                  </div> 
+
+
+
+
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <thead>                  
+                    <tr>
+                      <th style="width: 10px">id</th>
+                      <th>标题</th>
+                      <th>作者</th>
+                      <th>简介</th>
+                      <th style="width: 40px">发布时间</th>
+                      <th style="width: 400px">内容</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in result %}
+                    <tr>
+                      <td>{{item._id.toString()}}</td>
+                      <td>{{item.title}}</td>
+                      <td>{{item.author}}</td>
+                      <td>{{item.intro}}</td>
+                      <td>{{item.time}}</td>
+                      <td>{{item.wrods}}</td>
+                      <td>
+                        <button type="button" class="btn-primary" data-id={{item._id.toString()}}>编辑</button>
+                        <button class="btn-danger" data-id={{item._id.toString()}}>删除</button>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer clearfix">
+                <ul class="pagination pagination-sm m-0 float-right">
+                  <li class="page-item"><a class="page-link prev-page" href="#">«</a></li>
+                  {% for p in arr %}
+                  <li class="page-item"><a class="page-link my-page">{{p}}</a></li>
+                  {% endfor %}
+                  <li class="page-item"><a class="page-link next-page" href="#">»</a></li>
+                </ul>
+              </div>
+            </div>        
+            <script>
+              function cli(){
+                var $btnd = $(".card table .btn-danger");
+            var $btnp = $(".card table .btn-primary");
+            $btnd.click((e)=>{
+              var target = e.target;
+              console.log($(target).closest("tr"))
+              var $id = ($(target).attr("data-id"))
+             var cf = confirm("确定删除？")
+             if(cf){
+              $.get('/table/del',{id:$id},(data)=>{
+                if(data.code==1){
+                  alert("删除成功");
+                  $(target).closest("tr").remove();
+                  history.go(0);
+                }
+              })
+             }
+            })
+            $btnp.click((e)=>{
+              var target = e.target;
+              console.log($(target).closest("tr"))
+              var id =($(target).closest("tr").children("td").eq(0).html()) 
+              var ot =($(target).closest("tr").children("td").eq(1).html()) 
+              var oa =($(target).closest("tr").children("td").eq(2).html()) 
+              var oi =($(target).closest("tr").children("td").eq(3).html()) 
+              var od =($(target).closest("tr").children("td").eq(4).html()) 
+              var ow =($(target).closest("tr").children("td").eq(5).html()) 
+              $(target).closest("tr").children("td").eq(1).html(`<input type="text" name="tittle" class="form-control" value=${ot}>`)
+              $(target).closest("tr").children("td").eq(2).html(`<input type="text" name="author" class="form-control" value=${oa}>`)
+              $(target).closest("tr").children("td").eq(3).html(`<input type="text" name="intro" class="form-control" value=${oi}>`)
+              $(target).closest("tr").children("td").eq(4).html(`<input type="text" name="date" class="form-control" value=${od}>`)
+              $(target).closest("tr").children("td").eq(5).html(`<input type="text" name="words" class="form-control" value=${ow}>`)
+              $(target).closest("td").append($(` <button type="submit" class="btn-default" data-id=${id}>保存</button>`))
+              $(".card table .btn-primary").remove();
+              $(".card table .btn-default").click((e)=>{
+                 target = e.target;
+                  var $id = ($(target).attr("data-id"))
+                  var ntittle = $(target).closest("tr").children("td").eq(1).children("input").val();
+                  var nauthor = $(target).closest("tr").children("td").eq(2).children("input").val();
+                  var nintro = $(target).closest("tr").children("td").eq(3).children("input").val();
+                  var ntime =$(target).closest("tr").children("td").eq(4).children("input").val();
+                  var nwords = $(target).closest("tr").children("td").eq(5).children("input").val();
+                 $.get('/table/change',{id:$id,tittle:ntittle,author:nauthor,time:ntime,intro:nintro,words:nwords},(data)=>{
+                if(data.code==1){
+                  alert("修改成功");
+                  history.go(0);
+                }
+              })
+              })            
+            })
+          
+              }
+              cli();
+              function turnPage(p){   
+              $.get('/table/page',{p:p},(data)=>{
+                console.log(data);
+                var data = data.result;
+                $("tbody").remove();
+                var $tb=$("<tbody></tbody>") 
+                for(var i= 0;i<data.length;i++){
+                  var $tr = $("<tr></tr>");
+                  for(var j in data[i]){
+                    var $td = $("<td></td>");
+                    $tr.append($td)
+                  }
+                  $tr.children("td").eq(0).html(data[i]._id);
+                  $tr.children("td").eq(1).html(data[i].title);
+                  $tr.children("td").eq(2).html(data[i].author);
+                  $tr.children("td").eq(3).html(data[i].intro);
+                  $tr.children("td").eq(4).html(data[i].time);
+                  $tr.children("td").eq(5).html(data[i].wrods);
+                  $tr.children("td").eq(6).html(` 
+                  <button type="button" class="btn-primary" data-id=${data[i]._id}>编辑</button>
+                  <button class="btn-danger" data-id=${data[i]._id}>删除</button>`);
+                  $tb.append($tr)                 
+                }              
+                $(".table").append($tb);
+                cli();
+              })
+
+              }
+              var p =0;
+
+              $(".my-page").click((e)=>{
+              var target=e.target;
+              console.log($(target).html())
+               p=($(target).html())
+                turnPage(p)
+            })
+            $(".next-page").click(()=>{
+              if(p<$(".my-page").length){
+                p++
+              turnPage(p)
+              }else{
+                alert("这是最后一页");
+                return false;
+              } 
+            })
+            $(".prev-page").click(()=>{
+              if(p>1){
+                p--
+              turnPage(p)
+              }else{
+                alert("这是第一页");
+                return false;
+              } 
+            })
+            
+            $(".SearchBtn").click(()=>{
+              $.get('/table/search',{stxt:$(".SearchIpt").val()},(data)=>{
+                console.log(data);
+                var data = data.result;
+                $("tbody").remove();
+                var $tb=$("<tbody></tbody>") 
+                for(var i= 0;i<data.length;i++){
+                  var $tr = $("<tr></tr>");
+                  for(var j in data[i]){
+                    var $td = $("<td></td>");
+                    $tr.append($td)
+                  }
+                  $tr.children("td").eq(0).html(data[i]._id);
+                  $tr.children("td").eq(1).html(data[i].title);
+                  $tr.children("td").eq(2).html(data[i].author);
+                  $tr.children("td").eq(3).html(data[i].intro);
+                  $tr.children("td").eq(4).html(data[i].time);
+                  $tr.children("td").eq(5).html(data[i].wrods);
+                  $tr.children("td").eq(6).html(` 
+                  <button type="button" class="btn-primary" data-id=${data[i]._id}>编辑</button>
+                  <button class="btn-danger" data-id=${data[i]._id}>删除</button>`);
+                  $tb.append($tr)                 
+                }              
+                $(".table").append($tb);
+                cli();
+              })
+            })
+          
+          </script>
+{% endblock %}
